@@ -1,0 +1,9 @@
+.idea
+.vscode/*
+Thumbs.db
+.DS_Store
+crontab
+/API/*.tmp
+/Device/.config/
+/Device/.config/dlv/
+/Device/.bash_history
