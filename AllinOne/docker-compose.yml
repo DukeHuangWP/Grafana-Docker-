@@ -1,0 +1,80 @@
+version: '3.2'
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.28.0 #功能:數據紀錄
+    container_name: prometheus
+    restart: unless-stopped
+    ports:
+      - '3090:9090'
+    user: '0'
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml' #設定檔
+      - '--storage.tsdb.path=/prometheus/data'
+      - '--storage.tsdb.retention=90d'
+      - '--web.enable-lifecycle'
+    volumes:
+      - ./etc/prometheus:/etc/prometheus
+      - ./data/prometheus/data:/prometheus/data #-prometheus資料庫,可另自定義路徑或備份
+    depends_on:
+      - cadvisor
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.39.2 #功能:Docker監控容器資訊
+    container_name: cadvisor
+    restart: unless-stopped
+    ports:
+      - '3080:8080'
+    volumes:
+        - /:/rootfs:ro
+        - /var/run:/var/run:rw
+        - /sys:/sys:ro
+        - /var/lib/docker/:/var/lib/docker:ro #必須指向docker目錄
+    privileged: true
+
+  node-exporter:
+    image: prom/node-exporter:v1.1.2 #功能: 監控硬體資訊
+    container_name: node-exporter
+    restart: unless-stopped
+    ports:
+      - '3100:9100'
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+      - '--collector.textfile.directory=/node_exporter/prom'
+    volumes:
+      - /proc:/host/proc
+      - /sys:/host/sys
+      - /:/rootfs
+      - ./etc/node_exporter/prom:/node_exporter/prom
+
+    grafana:
+      image: grafana/grafana:8.0.3 #功能: 圖性畫面版顯示
+      container_name: grafana
+      depends_on:
+        - renderer #必須在renderer啟動後才啟用此容器
+      restart: unless-stopped
+      ports:
+        - '3000:3000'
+      user: '0'
+      volumes:
+        - ./data/grafana:/var/lib/grafana
+      environment:
+        - TZ=Asia/Taipei
+        - GF_SECURITY_ADMIN_PASSWORD=qweRTY123 #設定admin密碼
+        - GF_USERS_ALLOW_SIGN_UP=false #不准許註冊新用戶
+        - GF_RENDERING_SERVER_URL=http://172.17.0.1:8081/render #renderert插件網址,需配合docker0網卡網域
+        - GF_RENDERING_CALLBACK_URL=http://172.17.0.1:3000/ #grafana自身網址,需配合docker0網卡網域
+  
+    renderer:
+      image: grafana/grafana-image-renderer:3.0.1 #功能: 插件功能幫grafana生成圖表
+      container_name: renderer
+      restart: always
+      ports:
+        - '8081:8081'
+      environment:
+        - TZ=Asia/Taipei
+        - ENABLE_METRICS=true
+        - GF_RENDERER_PLUGIN_TZ=TZ=Asia/Taipei
+        - GF_RENDERER_PLUGIN_IGNORE_HTTPS_ERRORS=true

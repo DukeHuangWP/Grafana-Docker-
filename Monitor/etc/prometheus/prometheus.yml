@@ -1,0 +1,148 @@
+# global config
+global:
+  scrape_interval:     15s
+scrape_configs:
+- job_name: 'prometheus'
+  scrape_interval: 5s
+  static_configs:
+    - targets: ['172.17.0.1:9090']
+########################################
+
+- job_name: 'cadvisor-Test'
+  scrape_interval: 10s
+  metrics_path: '/metrics'
+  static_configs:
+    - targets: ['35.241.104.139:3000']
+- job_name: 'node-Test'
+  scrape_interval: 5s
+  static_configs:
+    - targets: ['35.241.104.139:9100']
+- job_name: 'process-Test'
+  scrape_interval: 20s
+  metrics_path: '/metrics'
+  static_configs:
+    - targets: ['35.241.104.139:9101']
+
+########################################
+- job_name: 'node-Stage-DB'
+  scrape_interval: 5s
+  static_configs:
+    - targets: ['34.92.55.224:9100']
+
+- job_name: 'process-Stage-DB'
+  scrape_interval: 20s
+  metrics_path: '/metrics'
+  static_configs:
+    - targets: ['34.92.55.224:9101']
+
+- job_name: 'node-Stage-MQTT'
+  scrape_interval: 5s
+  static_configs:
+    - targets: ['34.96.167.150:9100']
+
+- job_name: 'process-Stage-MQTT'
+  scrape_interval: 20s
+  metrics_path: '/metrics'
+  static_configs:
+    - targets: ['34.96.167.150:9101']
+
+- job_name: 'node-Stage-WB'
+  scrape_interval: 5s
+  static_configs:
+    - targets: ['34.92.138.248:9100']
+
+- job_name: 'process-Stage-WB'
+  scrape_interval: 20s
+  metrics_path: '/metrics'
+  static_configs:
+    - targets: ['34.92.138.248:9101']
+
+- job_name: 'node-Stage-XML'
+  scrape_interval: 5s
+  static_configs:
+    - targets: ['34.150.43.42:9100']
+
+- job_name: 'process-Stage-XML'
+  scrape_interval: 20s
+  metrics_path: '/metrics'
+  static_configs:
+    - targets: ['34.150.43.42:9101']
+
+- job_name: 'cadvisor-Stage-XML'
+  scrape_interval: 10s
+  metrics_path: '/metrics'
+  static_configs:
+    - targets: ['34.150.43.42:3000']
+
+
+
+########################################
+
+- job_name: 'node-Proc-DB'
+  scrape_interval: 5s
+  static_configs:
+    - targets: ['34.80.149.81:9100']
+
+- job_name: 'process-Proc-DB'
+  scrape_interval: 20s
+  metrics_path: '/metrics'
+  static_configs:
+    - targets: ['34.80.149.81:9101']
+
+- job_name: 'node-Proc-LB'
+  scrape_interval: 5s
+  static_configs:
+    - targets: ['34.92.90.11:9100']
+
+- job_name: 'process-Proc-LB'
+  scrape_interval: 20s
+  metrics_path: '/metrics'
+  static_configs:
+    - targets: ['34.92.90.11:9101']
+
+- job_name: 'node-Proc-MQTT'
+  scrape_interval: 5s
+  static_configs:
+    - targets: ['34.92.241.68:9100']
+
+- job_name: 'process-Proc-MQTT'
+  scrape_interval: 20s
+  metrics_path: '/metrics'
+  static_configs:
+    - targets: ['34.92.241.68:9101']
+
+- job_name: 'node-Proc-WB'
+  scrape_interval: 5s
+  static_configs:
+    - targets: ['34.92.122.132:9100']
+
+- job_name: 'process-Proc-WB'
+  scrape_interval: 20s
+  metrics_path: '/metrics'
+  static_configs:
+    - targets: ['34.92.122.132:9101']
+
+- job_name: 'node-Proc-XML'
+  scrape_interval: 5s
+  static_configs:
+    - targets: ['34.96.171.150:9100']
+
+- job_name: 'process-Proc-XML'
+  scrape_interval: 20s
+  metrics_path: '/metrics'
+  static_configs:
+    - targets: ['34.96.171.150:9101']
+
+- job_name: 'cadvisor-Proc-XML'
+  scrape_interval: 10s
+  metrics_path: '/metrics'
+  static_configs:
+    - targets: ['34.96.171.150:3000']
+
+
+
+
+
+    
+
+
